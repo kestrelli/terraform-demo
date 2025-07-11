@@ -15,7 +15,8 @@
 
 #### Step 1: 创建业务工作负载（Deployment）
 
-​**1.创建 Deployment YAML 文件(存放于deployment.yaml)**​
+​**1.创建 Deployment YAML 文件**​
+存放于deployment.yaml
 
 **2.部署工作负载**​
 
@@ -35,8 +36,8 @@ kubectl get pods -l app=real-ip-app
 #### Step 2: 创建直连 Pod 模式的 Service
 
 
-**1.创建 Service YAML 文件（存放于service.yaml）**​
-
+**1.创建 Service YAML 文件**​
+存放于service.yaml
 
 **2.部署 Service**​
 ```
