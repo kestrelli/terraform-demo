@@ -16,6 +16,7 @@
 #### Step 1: 创建业务工作负载（Deployment）
 
 ​**1.创建 Deployment YAML 文件**​
+
 存放于deployment.yaml
 
 **2.部署工作负载**​
@@ -37,6 +38,7 @@ kubectl get pods -l app=real-ip-app
 
 
 **1.创建 Service YAML 文件**​
+
 存放于service.yaml
 
 **2.部署 Service**​
@@ -51,6 +53,7 @@ kubectl describe svc clb-direct-pod
 
 
 #### Step 3: 验证真实源 IP 获取
+
 mac系统在终端/win系统在cmd中输入curl+service公网访问IP（如curl 114.132.191.109）
 
 
