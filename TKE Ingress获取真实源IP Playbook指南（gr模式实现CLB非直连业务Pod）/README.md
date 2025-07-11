@@ -44,7 +44,8 @@
 5. ​**权限**​： 确保账户有拉取容器镜像服务（TCR）的权限（镜像为公开可读）。
 ⚠️ ​**注意**​：
   - 无需Docker环境或镜像构建知识！
-
+  - 若需自定义镜像，请参考文档[TKE Ingress获取真实源IP Playbook指南](https://iwiki.woa.com/p/4015551548) 的镜像构建步骤，但本Playbook为简化跳过此部分。
+  
  ### **快速开始**​
 
 跟随以下步骤操作，每个步骤包括命令、YAML文件和截图指导。所有操作在kubectl命令行完成。
@@ -191,7 +192,7 @@ curl 159.75.190.194
 - ​**镜像作用**​：Flask镜像（`kestrel-seven-real-ip:v1.0`）专门处理请求头，打印并响应 `X-Forwarded-For` 和 `X-Real-Ip`。
 - ​**Ingress注解**​：`ingressClassName: qcloud` 启用腾讯云CLB七层转发，这是透传源IP的必要条件。
 - ​**端口映射**​：Service的 `targetPort:5000` 必须匹配Deployment端口，确保流量正确路由。
-- **零构建部署**​：直接使用预构建镜像，跳过文档中Docker构建（步骤4-6）和推送流程。
+- **零构建部署**​：直接使用预构建镜像，跳过文档[TKE Ingress获取真实源IP Playbook指南](https://iwiki.woa.com/p/4015551548)中Docker构建（步骤4-6）和推送流程。
 
 #### **为什么能获取真实IP？​**​
 CLB七层默认在HTTP头添加源IP，而gr模式NodePort Service不修改这些头，后端Pod直接读取并响应——全链路无IP丢失风险。
