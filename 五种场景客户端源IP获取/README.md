@@ -89,9 +89,6 @@ curl -s http://$CLB_IP | jq '.headers | {X-Forwarded-For, X-Real-Ip}'
 
 ### 📚 文档映射表
 
-## 📚 文档映射表
-
-
 |​**场景**​|​**源文档**​|​**关键区别点**​|
 |:-:|:-:|:-:|
 |VPC-CNI直连（原生节点）|文档LoadBalancer 直连 Pod 模式 Service 获取真实源 IP Playbook|直连注解+普通节点|
