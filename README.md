@@ -29,4 +29,34 @@ kubectl apply -f deployment.yaml
 ```
 kubectl get pods -l app=real-ip-app
 ```
-![截图](/Users/kestrelli/Desktop/LoadBalancer+直连+Pod+模式+Service+获取真实源+IP+Playbook/images/pod1.png)
+####Step 2: 创建直连 Pod 模式的 Service
+**1.创建 Service YAML 文件（存放于service.yaml）**​
+⚠️ ​**核心参数说明**​
+- `annotations.service.cloud.tencent.com/direct-access: "true"`：启用 CLB 直连 Pod
+
+**2.部署 Service**​
+```
+kubectl apply -f service.yaml
+```
+​**3.验证 Service 配置**​
+```
+kubectl describe svc clb-direct-pod
+```
+####Step 3: 验证真实源 IP 获取
+mac系统在终端/win系统在cmd中输入curl+service公网访问IP（如curl 114.132.191.109）
+
+
+### 故障排查
+
+
+|问题现象|排查方向|
+|:-:|:-:|
+|Pod 无法连接|1. 检查 `containerPort` 与业务端口是否一致<br>2. 检查 Pod 安全组是否放通|
+|源 IP 仍是节点 IP|检查 Service annotation `direct-access=true`|
+|CLB 无公网 IP|1. 检查账户余额/带宽限制<br>2. 确认未启用内网 LB|
+
+清理资源
+```
+kubectl delete svc clb-direct-pod
+kubectl delete deploy real-ip-demo
+```
