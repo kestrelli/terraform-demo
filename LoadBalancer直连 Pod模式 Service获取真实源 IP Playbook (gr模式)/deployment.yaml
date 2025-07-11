@@ -1,0 +1,22 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: real-ip-demo
+  labels:
+    app: real-ip-app
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: real-ip-app
+  template:
+    metadata:
+      labels:
+        app: real-ip-app
+    spec:
+      containers:
+      - name: real-ip-container
+        # 使用我的业务镜像
+        image: vickytan-demo.tencentcloudcr.com/kestrelli/images:v1.0
+        ports:
+        - containerPort: 5000  # 替换为实际业务端口
