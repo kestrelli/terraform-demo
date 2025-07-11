@@ -1,0 +1,22 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: real-ip-deployment
+  namespace: kestrel-catchip  # 使用步骤1创建的命名空间
+  labels:
+    app: real-ip-app  # 标签需匹配后续Service
+spec:
+  replicas: 2  # Pod副本数，推荐2个确保高可用
+  selector:
+    matchLabels:
+      app: real-ip-app
+  template:
+    metadata:
+      labels:
+        app: real-ip-app
+    spec:
+      containers:
+      - name: flask-container
+        image: test-angel01.tencentcloudcr.com/kestrelli/kestrel-seven-real-ip:v1.0  # 预构建镜像
+        ports:
+          - containerPort: 5000  # Flask服务端口，与镜像内一致
