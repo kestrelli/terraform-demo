@@ -42,6 +42,7 @@
 3. ​**基础工具**​：安装kubectl并配置集群上下文（参考腾讯云文档）。
 4. ​**预构建镜像**​：使用我预推送的Flask镜像 `test-angel01.tencentcloudcr.com/kestrelli/kestrel-seven-real-ip:v1.0`。该镜像基于Flask服务，能打印请求头并返回源IP（无需自行构建）。
 5. ​**权限**​： 确保账户有拉取容器镜像服务（TCR）的权限（镜像为公开可读）。
+
 ⚠️ ​**注意**​：
   - 无需Docker环境或镜像构建知识！
   - 若需自定义镜像，请参考文档[TKE Ingress获取真实源IP Playbook指南](https://iwiki.woa.com/p/4015551548) 的镜像构建步骤，但本Playbook为简化跳过此部分。
