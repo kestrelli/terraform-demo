@@ -40,7 +40,7 @@ real-ip-demo-xxx-xxx 1/1 Running 0 xxs
 
 **键入Service.yaml中的代码**
 
-#### **Step 4: 验证真实源IP**​
+#### **Step 3: 验证真实源IP**​
 
 **1.通过curl测试**​
 ```
