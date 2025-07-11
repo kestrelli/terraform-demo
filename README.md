@@ -1,4 +1,5 @@
-​#### 背景
+
+​### 背景
 
 本 Playbook 旨在指导您通过 Kubernetes 的 `VPC-CNI` 网络模式，实现 ​**CLB 直连业务 Pod**​ 的能力，确保业务 Pod 收到的请求源 IP 为客户端真实 IP。本方案完全绕过 NodePort，适用于腾讯云容器服务（TKE）环境。
 
