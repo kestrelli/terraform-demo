@@ -11,7 +11,8 @@
 2. ​**TKE集群**​：版本≥1.14，已配置好kubectl访问凭证
 
 ## 快速开始
-####步骤1：创建Deployment
+### 步骤1：创建Deployment
+
 **1.创建自定义命名空间（默认为default，自定义为kestrelli）**
 ```
 kubectl create ns kestrelli
@@ -37,7 +38,8 @@ kubectl get pods -l app=kestrelli-real-ip -n kestelli
 ```
 **预期输出**​：✅ 看到2个`Running`状态的Pod
 
-####步骤2：创建Service（NodePort类型）
+### 步骤2：创建Service（NodePort类型）
+
 **1.创建 Service YAML 文件(svc.yaml)**
 
 已存放在svc.yaml中
@@ -62,7 +64,8 @@ kubectl get svc real-ip-svc -n kestrelli
 ```
 ✅ 查看`PORT(S)`列显示 `80:3xxxx/TCP`（3xxxx为自动分配的节点端口）
 
-####步骤3：创建Ingress（核心配置）
+### 步骤3：创建Ingress（核心配置）
+
 **1.创建 Ingrss YAML 文件（ingress.yaml）**
 
 已存放在ingress.yaml中
@@ -81,7 +84,8 @@ kubectl apply -f ingress.yaml  -n kestrelli
 kubectl get ingress real-ip-ingress -n kestrelli -o jsonpath='{.status.loadBalancer.ingress[0].ip}'
 ```
 
-####步骤4：验证真实源IP
+### 步骤4：验证真实源IP
+
 **执行命令**​：
 
 ``` 
@@ -97,18 +101,21 @@ curl http://<上一步获取的IP>
 }  
 ```
 
-####故障排查表
+### 故障排查表
+
 |问题现象|解决方案|
 |:-:|:-:|
 |`curl`无响应|1. 检查Ingress IP是否正确<br>2. 执行 `kubectl describe ingress real-ip-ingress -n kestrelli（指定的命名空间）` 查看events|
 |返回404错误|检查Service名称是否拼写正确（`real-ip-svc`）|
 |看到Node IP而非公网IP|确认Ingress注解 `ingressClassName: qcloud` 已配置|
 |镜像拉取失败|在集群所在VPC执行：<br>`docker pull test-angel01.tencentcloudcr.com/kestrelli/kestrel-seven-real-ip` 测试网络连通性|
+
 >💡 ​**锦囊**​：所有YAML已通过测试，直接复制粘贴即可运行
 
 ## 原理解析
 
 **关键设计**​：
+
 1. 镜像直接处理请求，返回`X-Forwarded-For`和`X-Real-IP`头,获取客户端真实源IP
 2. Service的`NodePort`模式自动透传源IP
 3. Ingress注解`qcloud`启用腾讯云CLB七层转发
