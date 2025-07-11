@@ -18,7 +18,9 @@
 #### 操作流程
 
 以下步骤均在腾讯云Orca Term中执行，专为TKE集群环境优化。
-##### Step 1: 启用集群GlobalRoute直连能力
+
+## Step 1: 启用集群GlobalRoute直连能力
+
 在Orca Term中配置集群级直连开关
 
 ``` 
@@ -39,9 +41,10 @@ kubectl get configmap tke-service-controller-config -n kube-system -o yaml | gre
 
 **关键点**​：此配置启用集群维度的直连能力，是后续操作的基础。
 
-##### Step 2: 创建业务工作负载（Deployment）
+## Step 2: 创建业务工作负载（Deployment）
 
 在Orca Term中通过命令行创建业务Deployment：
+
 **1.创建 Deployment YAML 文件**
 
 存放于deployment.yaml
@@ -57,7 +60,7 @@ watch kubectl get pods -l app=real-ip-app
 
 **验证要求**​：所有Pod状态为`Running`（按Ctrl+C退出watch）
 
-##### Step 3: 创建直连Pod模式的Service
+## Step 3: 创建直连Pod模式的Service
 
 在Orca Term中创建LoadBalancer Service并启用直连模式：
 
@@ -78,7 +81,7 @@ kubectl describe svc clb-direct-pod
 - `LoadBalancer Ingress`显示公网IP
 
 
-##### Step 4: 验证真实源IP获取
+## Step 4: 验证真实源IP获取
 
 **1. 获取CLB公网IP**
 ```
@@ -93,7 +96,7 @@ curl -s http://$CLB_IP
 
 **若业务不支持支持IP回显，可直接curl+CLB公网IP**
 
-** 3. 若有需要，可在外部设备验证**
+**3. 若有需要，可在外部设备验证**
 ```
 echo "请在外部设备执行:"
 echo "  curl http://$CLB_IP"
@@ -119,6 +122,7 @@ echo "或浏览器访问 http://$CLB_IP"
 
 #### 清理资源
 在Orca Term中释放资源避免费用：
+
 **1. 删除Service（保留Deployment可复用）**
 
 ``` 
@@ -138,10 +142,13 @@ kubectl patch cm tke-service-controller-config -n kube-system --patch '{"data":{
 
 ### TKE环境最佳实践
 
+ 
  ​**1.Orca Term操作优化**​：
 	- 使用`watch`命令实时监控资源状态（如`watch -n 2 kubectl get pods`）
 	- 用`alias k=kubectl`简化命令输入
 	- 重要操作前创建屏幕快照（Orca Term截图功能）
+
+ 
  ​**2.安全建议**​：
 	- 为CLB配置安全组规则，限制访问源IP
 	- 定期轮转镜像仓库访问凭证
