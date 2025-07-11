@@ -98,6 +98,7 @@ curl -s http://$CLB_IP | jq '.headers | {X-Forwarded-For, X-Real-Ip}'
 |GlobalRouter非直连（原生节点）|文档TKE Ingress获取真实源IP Playbook指南（gr模式实现CLB非直连业务Pod）|Ingress qcloud注解|
 
 所有方案均通过腾讯云TKE 验证
+
 预构建镜像：
 - `vickytan-demo.tencentcloudcr.com/kestrelli/images：v1.0`
 - `test-angel01.tencentcloudcr.com/kestrelli/kestrel-seven-real-ip:v1.0`
