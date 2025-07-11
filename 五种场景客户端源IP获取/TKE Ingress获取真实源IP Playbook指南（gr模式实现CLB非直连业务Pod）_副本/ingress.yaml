@@ -1,0 +1,18 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: real-ip-ingress
+  namespace: kestrel-catchip  # 匹配命名空间
+spec:
+  ingressClassName: qcloud
+  rules:
+  - http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: real-ip-service  # 匹配Service名称
+  # 关联上一步的Service
+            port:
+              number: 80    # 匹配Service端口
