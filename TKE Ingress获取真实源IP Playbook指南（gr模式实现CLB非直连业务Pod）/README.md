@@ -198,7 +198,8 @@ curl 159.75.190.194
 #### **为什么能获取真实IP？​**​
 CLB七层默认在HTTP头添加源IP，而gr模式NodePort Service不修改这些头，后端Pod直接读取并响应——全链路无IP丢失风险。
 
-###总结
+### 总结
+
 本Playbook基于文档[TKE Ingress获取真实源IP Playbook指南(简化版)](https://iwiki.woa.com/p/4015555654) ，但网络模式使用GR网络，结构优化为简化版Playbook，跳过镜像构建，使用预推送镜像，适合快速实现。
 
 如果您需要自定义镜像或详细构建步骤，请参考文档[TKE Ingress获取真实源IP Playbook指南](https://iwiki.woa.com/p/4015551548) 的完整流程。部署成功后，真实源IP将稳定返回，适用于日志分析、安全审计等场景。
