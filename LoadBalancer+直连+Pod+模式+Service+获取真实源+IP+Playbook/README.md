@@ -6,11 +6,10 @@
 ### 前置条件
 
 1. ​**集群环境**​
-	- TKE 集群需启用 `VPC-CNI` 网络模式
+	- TKE 集群需自建好且启用 `VPC-CNI` 网络模式
 	- 确保集群有可用节点且 `kubectl` 已配置访问权限
 2. ​**镜像准备**​
-	- 已构建业务镜像并推送至腾讯云镜像仓库（个人版/企业版）
-	- 示例镜像版本：`vickytan-demo.tencentcloudcr.com/kestrelli/images：v1.0`
+	- 使用示例镜像版本：`vickytan-demo.tencentcloudcr.com/kestrelli/images：v1.0`，若有需要可构建业务镜像并推送至腾讯云镜像仓库（个人版/企业版）
 
 ### 操作流程
 
