@@ -14,35 +14,42 @@
 ### 操作流程
 
 #### Step 1: 创建业务工作负载（Deployment）
+
 ​**1.创建 Deployment YAML 文件(存放于deployment.yaml)**​
-📌 ​**关键配置**​
-- `metadata.labels` 需与后续 Service 选择器匹配
-- `containerPort` 需与业务实际端口一致
-​**2.部署工作负载**​
+
+**2.部署工作负载**​
 
 ``` 
 kubectl apply -f deployment.yaml
 ```
 
 **3.验证 Pod 状态**
+
+
 ​**预期输出**​：所有 Pod 状态为 `Running`
 ```
 kubectl get pods -l app=real-ip-app
 ```
-####Step 2: 创建直连 Pod 模式的 Service
+
+
+#### Step 2: 创建直连 Pod 模式的 Service
+
+
 **1.创建 Service YAML 文件（存放于service.yaml）**​
-⚠️ ​**核心参数说明**​
-- `annotations.service.cloud.tencent.com/direct-access: "true"`：启用 CLB 直连 Pod
+
 
 **2.部署 Service**​
 ```
 kubectl apply -f service.yaml
 ```
+
 ​**3.验证 Service 配置**​
 ```
 kubectl describe svc clb-direct-pod
 ```
-####Step 3: 验证真实源 IP 获取
+
+
+#### Step 3: 验证真实源 IP 获取
 mac系统在终端/win系统在cmd中输入curl+service公网访问IP（如curl 114.132.191.109）
 
 
