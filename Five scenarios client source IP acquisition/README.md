@@ -92,10 +92,10 @@ curl -s http://$CLB_IP | jq '.headers | {X-Forwarded-For, X-Real-Ip}'
 
 |**场景**|**源文档**|**关键区别点**|
 |:-:|:-:|:-:|
-|VPC-CNI直连（原生节点）|文档VPC-CNI模式下CLB直连pod获取客户端源IP-Playbook|直连注解+普通节点|
+|VPC-CNI直连（原生节点）|文档VPC-CNI模式下CLB直连pod获取客户端源IP-Playbook|直连注解+原生节点|
 |GlobalRouter直连（原生节点）|文档GlobalRouter模式下CLB直连pod获取客户端源IP-Playbook|ConfigMap全局开关|
-|VPC-CNI直连（超级节点）|文档超级节点模式下CLB直连pod获取客户端源IP-Playbook|超级节点自动生效|
-|VPC-CNI非直连（原生节点）|文档VPC-CNI模式下CLB非直连pod获取客户端源IP-Playbook|NodePort+Local策略|
+|VPC-CNI直连（超级节点）|文档超级节点模式下CLB直连pod获取客户端源IP-Playbook|超级节点生效|
+|VPC-CNI非直连（原生节点）|文档VPC-CNI模式下CLB非直连pod获取客户端源IP-Playbook|NodePort端口访问|
 |GlobalRouter非直连（原生节点）|文档GlobalRouter模式下CLB非直连pod获取客户端源IP-Playbook|Ingress qcloud注解|
 
 所有方案均通过腾讯云TKE 验证
