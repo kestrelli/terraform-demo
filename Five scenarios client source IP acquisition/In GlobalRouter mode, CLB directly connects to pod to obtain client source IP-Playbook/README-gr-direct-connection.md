@@ -5,7 +5,7 @@
 
 所有操作均在腾讯云Orca Term上执行，确保在TKE集群环境中，业务Pod能够获取客户端真实源IP。
 
-本方案通过GlobalRouter网络模式实现，完全绕过NodePort转发，适用于需要真实客户端IP的应用场景（如安全审计、日志分析）。
+本方案通过GlobalRouter网络模式实现，无需NodePort转发，适用于需要真实客户端IP的应用场景（如安全审计、日志分析）。
 
 ### 前置条件
 
@@ -14,11 +14,11 @@
 |:-:|:-:|:-:|
 |​**集群环境**​|• TKE集群已创建且启用GlobalRouter网络模式<br>• 集群节点状态正常<br>• kubectl已配置访问权限|• 在TKE控制台确认网络模式<br>• `kubectl get nodes`检查节点状态<br>• `kubectl cluster-info`验证连接|
 |​**镜像准备**​|• 业务镜像已推送至腾讯云镜像仓库<br>• 有权限拉取镜像|• 确认镜像地址格式：`<仓库>.tencentcloudcr.com/<命名空间>/<镜像>:<标签>`<br>• 在Orca Term测试：`docker pull <镜像地址>`|
-|​**访问权限**​|• Orca Term已绑定集群节点<br>• 拥有操作kubectl的权限<br>• 账户有创建CLB的配额|• 在Orca Term确认节点登录状态<br>• 尝试运行`kubectl get pods`验证权限<br>• 检查腾讯云账号余额和CLB配额|
+|​**访问权限**​|• 已绑定集群节点<br>• 拥有操作kubectl的权限<br>• 账户有创建CLB的配额|• 确认节点登录状态<br>• 尝试运行`kubectl get pods`验证权限<br>• 检查腾讯云账号余额和CLB配额|
 |​**业务准备**​|• 已知业务服务端口<br>• 准备测试客户端|• 确认Deployment的containerPort<br>• 准备可访问公网的设备（验证用）|
 
 #### 操作流程
-以下步骤均在腾讯云Orca Term中执行，专为TKE集群环境优化。
+以下步骤均在腾讯云Orca Term登录后执行，专为TKE集群环境优化。
 
 ##### Step 1: 启用集群GlobalRoute直连能力
 在Orca Term中配置集群级直连开关
@@ -27,12 +27,11 @@
 # 1. 编辑ConfigMap
 kubectl edit configmap tke-service-controller-config -n kube-system
 
-# 2. 在vi编辑器中添加关键参数
-# 定位到data字段，添加新行：
+# 2. 定位到data字段，添加新行
 GlobalRouteDirectAccess: "true"
 
 # 3. 保存退出
-# 按ESC键，输入:wq保存（Orca Term使用标准vi操作）
+# 按ESC键，输入:wq保存
 
 # 4. 验证配置
 kubectl get configmap tke-service-controller-config -n kube-system -o yaml | grep GlobalRouteDirectAccess
@@ -120,16 +119,6 @@ echo "或浏览器访问 http://$CLB_IP"
 - 在手机5G网络下访问，确认IP与公网IP一致
 - 对比`kubectl get nodes -o wide`显示的节点IP，确保不同
 
-
-#### 故障排查（Orca Term环境特供版）
-|现象|原因|解决方案|
-|:-:|:-:|:-:|
-|ConfigMap保存失败|vi操作不熟练|使用`kubectl patch`命令替代：<br>`kubectl patch cm tke-service-controller-config -n kube-system --patch '{"data":{"GlobalRouteDirectAccess":"true"}}'`|
-|Pod状态异常|镜像拉取失败|1. `kubectl describe pod <pod-name>`查看事件<br>2. 在Orca Term手动拉取：`docker pull <镜像>`<br>3. 检查镜像仓库权限|
-|Service无公网IP|配额不足或注解错误|1. `kubectl describe svc`查看事件<br>2. 确认注解`direct-access: "true"`存在<br>3. 检查腾讯云账号CLB配额|
-|访问返回节点IP|直连未生效|三重检查：<br>1. ConfigMap中GlobalRouteDirectAccess=true<br>2. Service注解direct-access=true
-|Orca Term连接断开|会话超时|1. 使用`tmux`创建持久会话<br>2. 关键操作前刷新Orca Term连接|
-
 #### 清理资源
 在Orca Term中释放资源避免费用：
 **1. 删除Service（保留Deployment可复用）**
@@ -147,6 +136,16 @@ kubectl delete deploy real-ip-demo
 ```
 kubectl patch cm tke-service-controller-config -n kube-system --patch '{"data":{"GlobalRouteDirectAccess":"false"}}'
 ```
+
+
+#### 故障排查
+|现象|原因|解决方案|
+|:-:|:-:|:-:|
+|ConfigMap保存失败|vi操作不熟练|使用`kubectl patch`命令替代：<br>`kubectl patch cm tke-service-controller-config -n kube-system --patch '{"data":{"GlobalRouteDirectAccess":"true"}}'`|
+|Pod状态异常|镜像拉取失败|1. `kubectl describe pod <pod-name>`查看事件<br>2. 在Orca Term手动拉取：`docker pull <镜像>`<br>3. 检查镜像仓库权限|
+|Service无公网IP|配额不足或注解错误|1. `kubectl describe svc`查看事件<br>2. 确认注解`direct-access: "true"`存在<br>3. 检查腾讯云账号CLB配额|
+|访问返回节点IP|直连未生效|三重检查：<br>1. ConfigMap中GlobalRouteDirectAccess=true<br>2. Service注解direct-access=true
+|Orca Term连接断开|会话超时|1. 使用`tmux`创建持久会话<br>2. 关键操作前刷新Orca Term连接|
 
 
 ### TKE环境最佳实践
