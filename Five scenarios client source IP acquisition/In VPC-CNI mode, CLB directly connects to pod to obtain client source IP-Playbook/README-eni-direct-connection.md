@@ -37,8 +37,9 @@ kubectl get pods -l app=real-ip-app
 **预期输出**​：所有 Pod 状态为 `Running`
 
 
-####Step 2: 创建直连 Pod 模式的 Service
-**1.创建 Service YAML 文件（service.yaml）**​
+#### Step 2: 创建直连 Pod 模式的 Service
+
+**1.创建 Service YAML 文件**​
 
 已存放在service.yaml文件中
 
@@ -57,8 +58,10 @@ kubectl describe svc clb-direct-pod
 **关键检查项**​：
 - `Annotations` 包含 `direct-access: true`
 
-####Step 3: 验证真实源 IP 获取
+#### Step 3: 验证真实源 IP 获取
+
 mac系统在终端/win系统在cmd中输入curl+service公网访问IP（如curl 114.132.191.109）
+
 **预期结果**​：显示的客户端 IP ​**非**节点 IP，而是真实公网 IP
 
 ### 故障排查
