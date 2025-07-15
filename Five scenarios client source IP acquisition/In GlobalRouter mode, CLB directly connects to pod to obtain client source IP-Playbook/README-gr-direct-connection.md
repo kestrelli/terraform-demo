@@ -138,17 +138,6 @@ kubectl delete deploy real-ip-demo
 kubectl patch cm tke-service-controller-config -n kube-system --patch '{"data":{"GlobalRouteDirectAccess":"false"}}'
 ```
 
-
-#### 故障排查
-|现象|原因|解决方案|
-|:-:|:-:|:-:|
-|ConfigMap保存失败|vi操作不熟练|使用`kubectl patch`命令替代：<br>`kubectl patch cm tke-service-controller-config -n kube-system --patch '{"data":{"GlobalRouteDirectAccess":"true"}}'`|
-|Pod状态异常|镜像拉取失败|1. `kubectl describe pod <pod-name>`查看事件<br>2. 在Orca Term手动拉取：`docker pull <镜像>`<br>3. 检查镜像仓库权限|
-|Service无公网IP|配额不足或注解错误|1. `kubectl describe svc`查看事件<br>2. 确认注解`direct-access: "true"`存在<br>3. 检查腾讯云账号CLB配额|
-|访问返回节点IP|直连未生效|三重检查：<br>1. ConfigMap中GlobalRouteDirectAccess=true<br>2. Service注解direct-access=true
-|Orca Term连接断开|会话超时|1. 使用`tmux`创建持久会话<br>2. 关键操作前刷新Orca Term连接|
-
-
 ### TKE环境最佳实践
 
  ​**1.操作优化**​：
@@ -168,4 +157,13 @@ kubectl patch cm tke-service-controller-config -n kube-system --patch '{"data":{
 kubectl top pods -l app=real-ip-app
 # 查看CLB监控指标（腾讯云控制台）
 ```
+
+#### 故障排查
+|现象|原因|解决方案|
+|:-:|:-:|:-:|
+|ConfigMap保存失败|vi操作不熟练|使用`kubectl patch`命令替代：<br>`kubectl patch cm tke-service-controller-config -n kube-system --patch '{"data":{"GlobalRouteDirectAccess":"true"}}'`|
+|Pod状态异常|镜像拉取失败|1. `kubectl describe pod <pod-name>`查看事件<br>2. 在Orca Term手动拉取：`docker pull <镜像>`<br>3. 检查镜像仓库权限|
+|Service无公网IP|配额不足或注解错误|1. `kubectl describe svc`查看事件<br>2. 确认注解`direct-access: "true"`存在<br>3. 检查腾讯云账号CLB配额|
+|访问返回节点IP|直连未生效|三重检查：<br>1. ConfigMap中GlobalRouteDirectAccess=true<br>2. Service注解direct-access=true
+|Orca Term连接断开|会话超时|1. 使用`tmux`创建持久会话<br>2. 关键操作前刷新Orca Term连接|
 
