@@ -64,6 +64,13 @@ mac系统在终端/win系统在cmd中输入curl+service公网访问IP（如curl 
 
 **预期结果**​：显示的客户端 IP ​**非**节点 IP，而是真实公网 IP
 
+清理资源
+```
+kubectl delete svc clb-direct-pod
+kubectl delete deploy real-ip-demo
+```
+
+
 ### 故障排查
 
 
@@ -73,9 +80,4 @@ mac系统在终端/win系统在cmd中输入curl+service公网访问IP（如curl 
 |源 IP 仍是节点 IP|检查 Service annotation `direct-access=true`|
 |CLB 无公网 IP|1. 检查账户余额/带宽限制<br>2. 确认未启用内网 LB|
 
-清理资源
-```
-kubectl delete svc clb-direct-pod
-kubectl delete deploy real-ip-demo
-```
 
