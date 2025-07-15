@@ -103,5 +103,3 @@ curl -s http://$CLB_IP | jq '.headers | {X-Forwarded-For, X-Real-Ip}'
 预构建镜像：
 - `vickytan-demo.tencentcloudcr.com/kestrelli/images：v1.0`
 - `test-angel01.tencentcloudcr.com/kestrelli/kestrel-seven-real-ip:v1.0`
-
-![Uploading image.png…]()
