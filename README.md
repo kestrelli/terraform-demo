@@ -6,25 +6,31 @@
 
 |**场景**|**网络模式**|**连接方式**|**节点类型**|**核心特征**|
 |:-:|:-:|:-:|:-:|:-:|
-|**场景1**|VPC-CNI|直连|原生节点|注解`direct-access: true`|
-|**场景2**|GlobalRouter|直连|原生节点|ConfigMap启用`GlobalRouteDirectAccess`|
-|**场景3**|VPC-CNI|直连|超级节点|天然支持直连|
-|**场景4**|VPC-CNI|非直连|原生节点|需配置X-Forwarded-For头|
-|**场景5**|GlobalRouter|非直连|原生节点|需配置X-Forwarded-For头|
+|**场景1**|VPC-CNI|直连|原生节点|direct-access: true + 四层镜像|
+|**场景2**|GlobalRouter|直连|原生节点|GlobalRouteDirectAccess=true + 四层镜像|
+|**场景3**|VPC-CNI|直连|超级节点|direct-access: true + 自动托管节点，天然支持直连|
+|**场景4**|VPC-CNI|非直连|原生节点|type: NodePort + ingress.class: qcloud + 七层镜像|
+|**场景5**|GlobalRouter|非直连|原生节点|type: NodePort + ingress.class: qcloud + 七层镜像|
 
 ## 🔧 核心配置详解
 
-### 场景1：VPC-CNI直连（原生节点）
-```
-# service.yaml 关键配置
+### 场景1：VPC-CNI直连原生节点（四层服务）​​
+# service.yaml
+apiVersion: v1
+kind: Service
 metadata:
   annotations:
-    service.cloud.tencent.com/direct-access: "true"  # 直连开关
+    service.cloud.tencent.com/direct-access: "true"  # 核心特征：直连开关
 spec:
   type: LoadBalancer
   ports:
-  - targetPort: 5000  # 业务实际端口
-```
+  - port: 80
+    targetPort: 5000  # 业务实际端口
+
+#### 核心特征​
+- 通过direct-access: true注解启用CLB直连Pod
+- 使用四层镜像​：vickytan-demo.tencentcloudcr.com/kestrelli/images:v1.0
+- 源IP通过TCP层remote_addr直接获取
 
 ### 场景2：GlobalRouter直连（原生节点）
 
