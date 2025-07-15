@@ -14,13 +14,12 @@
 
 ## 🔧 业务场景配置举例说明
 
-### 场景1：VPC-CNI直连原生节点（四层服务）​​
+### 场景1：VPC-CNI直连pod（原生节点）​​
 ```
 # 以service.yaml文件配置为例
 # 核心特征​
-- 通过direct-access: true注解启用CLB直连Pod
-- 使用四层镜像​：vickytan-demo.tencentcloudcr.com/kestrelli/images:v1.0
-- 源IP通过TCP层remote_addr直接获取
+# 通过direct-access: true注解启用CLB直连Pod
+# 源IP通过TCP层remote_addr直接获取
 
 apiVersion: v1
 kind: Service
@@ -41,11 +40,14 @@ spec:
 
 
 
-### 场景2：GlobalRouter直连原生节点（四层服务）​​
+### 场景2：GlobalRouter直连pod（原生节点）​​
 
 ```
 # 以service.yaml文件配置为例
-apiVersion: v1
+# 核心特征
+# 依赖ConfigMap全局开关 GlobalRouteDirectAccess:"true"
+# 源IP通过remote_addr直接获取apiVersion: v1
+
 kind: Service
 metadata:
   name: clb-direct-pod
@@ -66,14 +68,16 @@ kubectl patch cm tke-service-controller-config -n kube-system \
   --patch '{"data":{"GlobalRouteDirectAccess":"true"}}'  # 启用全局直连
 ```
 
-#### 核心特征：​​
-- 依赖ConfigMap全局开关 GlobalRouteDirectAccess:"true"
-- 使用四层镜像，源IP通过remote_addr直接获取
 
-### 场景3： VPC-CNI直连超级节点（四层服务）
+
+### 场景3： VPC-CNI直连pod（超级节点）
 
 ```
 # 以service.yaml文件配置为例
+# 核心特征：​​
+# ​无需节点SSH操作，超级节点自动托管
+# 源IP通过remote_addr获取
+
 apiVersion: v1
 kind: Service
 metadata:
@@ -90,14 +94,14 @@ spec:
       targetPort: 5000
 ```
 
-#### 核心特征：​​
-- ​无需节点SSH操作，超级节点自动托管
-- 与场景1配置完全兼容，仅节点类型不同
-- 使用四层镜像，源IP通过remote_addr获取
 
-### 场景4：VPC-CNI非直连原生节点（七层服务）​​
+
+### 场景4：VPC-CNI非直连pod（原生节点）​​
 ```
 # 以service.yaml文件配置为例
+# 核心特征
+# 通过X-Forwarded-For请求头获取源IP
+
 apiVersion: v1
 kind: Service
 metadata:
@@ -111,15 +115,17 @@ spec:
       targetPort: 5000  # 指向Flask业务端口
 ```
 
-#### 核心特征：​​
-- 使用七层镜像​：test-angel01.tencentcloudcr.com/kestrelli/kestrel-seven-real-ip:v1.0
-- 通过X-Forwarded-For请求头获取源IP
 
 
-### 场景5：GlobalRouter非直连原生节点（七层服务）
+
+### 场景5：GlobalRouter非直连pod（原生节点）
 
 ```
 # 以service.yaml文件配置为例
+# 核心特征​​
+# 通过X-Forwarded-For头传递源IP
+# Service类型必须为NodePort
+
 apiVersion: v1
 kind: Service
 metadata:
@@ -133,31 +139,7 @@ spec:
       targetPort: 5000
 ```
 
-#### 核心特征：​​
-- 使用七层镜像，通过X-Forwarded-For头传递源IP
-- Service类型必须为NodePort
 
-### 配置验证命令​
-```
-# 检查Service直连注解
-kubectl describe svc <SERVICE_NAME> | grep "direct-access"
-
-# 查看Ingress公网IP
-kubectl get ingress -n <NAMESPACE> -o jsonpath='{.status.loadBalancer.ingress[0].ip}'
-
-# 测试源IP（七层服务）
-curl http://<CLB_IP>  # 查看返回的X-Forwarded-For头
-```
-
-### **故障排查速查表**​
-
-
-|现象|高频原因|解决方案|
-|:-:|:-:|:-:|
-|源IP仍是节点IP|直连注解未生效|检查`direct-access: "true"`或ConfigMap开关|
-|七层服务返回404|Ingress未配置`qcloud`注解|添加`kubernetes.io/ingress.class: "qcloud"`|
-|Pod无法启动|镜像拉取失败|检查镜像地址及仓库权限|
-|CLB无公网IP|账户配额不足|检查CLB配额及账户余额|
 >​**预置镜像说明**​
-- ​**四层服务镜像**​：`vickytan-demo.tencentcloudcr.com/kestrelli/images:v1.0`（直连场景）
-- ​**七层服务镜像**​：`test-angel01.tencentcloudcr.com/kestrelli/kestrel-seven-real-ip:v1.0`（非直连场景）
+- ​**四层服务镜像**​：`vickytan-demo.tencentcloudcr.com/kestrelli/images:v1.0`（适用于直连场景）
+- ​**七层服务镜像**​：`test-angel01.tencentcloudcr.com/kestrelli/kestrel-seven-real-ip:v1.0`（适用于非直连场景）
