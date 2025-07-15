@@ -120,7 +120,8 @@ echo "或浏览器访问 http://$CLB_IP"
 - 对比`kubectl get nodes -o wide`显示的节点IP，确保不同
 
 #### 清理资源
-在Orca Term中释放资源避免费用：
+释放资源避免费用：
+
 **1. 删除Service（保留Deployment可复用）**
 
 ``` 
