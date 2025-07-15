@@ -15,17 +15,24 @@
 ## 🔧 核心配置详解
 
 ### 场景1：VPC-CNI直连原生节点（四层服务）​​
+```
 # service.yaml
 apiVersion: v1
 kind: Service
 metadata:
+  name: clb-direct-pod
   annotations:
-    service.cloud.tencent.com/direct-access: "true"  # 核心特征：直连开关
+    service.cloud.tencent.com/direct-access: "true"  # 核心直连开关
+    service.cloud.tencent.com/loadbalance-type: "OPEN"  # 公网CLB
 spec:
+  selector:
+    app: real-ip-app  # 匹配Deployment标签
   type: LoadBalancer
   ports:
-  - port: 80
-    targetPort: 5000  # 业务实际端口
+    - protocol: TCP
+      port: 80        # Service端口
+      targetPort: 5000 # 业务实际端口（需与Deployment一致）
+```
 
 #### 核心特征​
 - 通过direct-access: true注解启用CLB直连Pod
