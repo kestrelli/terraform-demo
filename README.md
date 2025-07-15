@@ -117,7 +117,7 @@ spec:
 ### 场景5：GlobalRouter非直连原生节点（七层服务）
 
 ```
-# service.yaml
+# 以service.yaml文件配置为例
 apiVersion: v1
 kind: Service
 metadata:
