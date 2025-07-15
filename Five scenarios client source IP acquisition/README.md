@@ -9,9 +9,9 @@
 |:-:|:-:|:-:|:-:|:-:|
 |**场景1**|VPC-CNI|直连|原生节点|注解`direct-access: true`|
 |**场景2**|GlobalRouter|直连|原生节点|ConfigMap启用`GlobalRouteDirectAccess`|
-|**场景3**|VPC-CNI|直连|超级节点|无需节点SSH|
+|**场景3**|VPC-CNI|直连|超级节点|天然支持直连|
 |**场景4**|VPC-CNI|非直连|原生节点|需配置X-Forwarded-For头|
-|**场景5**|GlobalRouter|非直连|原生节点|Ingress注解`ingressClassName: qcloud`|
+|**场景5**|GlobalRouter|非直连|原生节点|需配置X-Forwarded-For头|
 
 ## 🔧 核心配置详解
 
