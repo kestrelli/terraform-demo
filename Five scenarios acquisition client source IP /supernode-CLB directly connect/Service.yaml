@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: clb-direct-pod
+  annotations:
+    service.cloud.tencent.com/direct-access: "true"  # 关键！启用CLB直连Pod
+spec:
+  type: LoadBalancer  # 公网访问
+  selector:
+    app: real-ip-app  # 匹配Deployment的Pod标签
+  ports:
+    - protocol: TCP
+      port: 80         # Service对外端口
+      targetPort: 5000  # 映射到Pod的业务端口
