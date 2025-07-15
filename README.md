@@ -46,8 +46,9 @@ spec:
 # 以service.yaml文件配置为例
 # 核心特征
 # 依赖ConfigMap全局开关 GlobalRouteDirectAccess:"true"
-# 源IP通过remote_addr直接获取apiVersion: v1
+# 源IP通过remote_addr直接获取
 
+apiVersion: v1
 kind: Service
 metadata:
   name: clb-direct-pod
