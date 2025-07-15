@@ -150,11 +150,13 @@ kubectl patch cm tke-service-controller-config -n kube-system --patch '{"data":{
 
 ### TKE环境最佳实践
 
- ​**1.Orca Term操作优化**​：
+ ​**1.操作优化**​：
 	- 使用`watch`命令实时监控资源状态（如`watch -n 2 kubectl get pods`）
 	- 用`alias k=kubectl`简化命令输入
 	- 重要操作前创建屏幕快照（Orca Term截图功能）
- ​**2.安全建议**​：
+
+ 
+​**2.安全建议**​：
 	- 为CLB配置安全组规则，限制访问源IP
 	- 定期轮转镜像仓库访问凭证
 	- 生产环境使用独立服务账号操作kubectl
