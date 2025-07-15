@@ -6,17 +6,22 @@
 
 |**场景**|**网络模式**|**连接方式**|**节点类型**|**核心特征**|
 |:-:|:-:|:-:|:-:|:-:|
-|**场景1**|VPC-CNI|直连|原生节点|direct-access: true + 四层镜像|
-|**场景2**|GlobalRouter|直连|原生节点|GlobalRouteDirectAccess=true + 四层镜像|
-|**场景3**|VPC-CNI|直连|超级节点|direct-access: true + 自动托管节点，天然支持直连|
-|**场景4**|VPC-CNI|非直连|原生节点|type: NodePort + ingress.class: qcloud + 七层镜像|
-|**场景5**|GlobalRouter|非直连|原生节点|type: NodePort + ingress.class: qcloud + 七层镜像|
+|**场景1**|VPC-CNI|直连|原生节点|direct-access: true |
+|**场景2**|GlobalRouter|直连|原生节点|GlobalRouteDirectAccess=true |
+|**场景3**|VPC-CNI|直连|超级节点|direct-access: true，天然支持直连|
+|**场景4**|VPC-CNI|非直连|原生节点|type: NodePort + ingress.class: qcloud |
+|**场景5**|GlobalRouter|非直连|原生节点|type: NodePort + ingress.class: qcloud |
 
-## 🔧 核心配置详解
+## 🔧 业务场景配置举例说明
 
 ### 场景1：VPC-CNI直连原生节点（四层服务）​​
 ```
 # 以service.yaml文件配置为例
+# 核心特征​
+- 通过direct-access: true注解启用CLB直连Pod
+- 使用四层镜像​：vickytan-demo.tencentcloudcr.com/kestrelli/images:v1.0
+- 源IP通过TCP层remote_addr直接获取
+
 apiVersion: v1
 kind: Service
 metadata:
@@ -34,10 +39,7 @@ spec:
       targetPort: 5000 # 业务实际端口（需与Deployment一致）
 ```
 
-#### 核心特征​
-- 通过direct-access: true注解启用CLB直连Pod
-- 使用四层镜像​：vickytan-demo.tencentcloudcr.com/kestrelli/images:v1.0
-- 源IP通过TCP层remote_addr直接获取
+
 
 ### 场景2：GlobalRouter直连原生节点（四层服务）​​
 
