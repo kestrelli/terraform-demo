@@ -10,7 +10,6 @@
 - 自动生成 kubeconfig 文件
 
 
-----
 #### 先决条件
 
 1. ​**腾讯云账号**​
@@ -26,7 +25,6 @@
 	```
 
 
-----
 #### 文件结构
 
 ```
@@ -46,7 +44,8 @@
 	chmod +x deploy.sh destroy.sh
 	```
 2. ​**启动部署**​
-	```
+
+```
 	./deploy.sh
 	```脚本将提示输入：
 	- `SecretId` / `SecretKey`
@@ -54,12 +53,14 @@
 	- Kubernetes 版本（默认 `1.32.2`）
 	- 节点类型（默认 `SA5.MEDIUM4`）
 ```
-3. ​**访问集群**​
-	```
-	kubectl --kubeconfig kubeconfig.yaml get nodes
-	```
 
-----
+3. ​**访问集群**​
+
+```
+	kubectl --kubeconfig kubeconfig.yaml get nodes
+```
+
+
 #### 核心配置参数
 
 
@@ -97,7 +98,6 @@
 ```>注意：这将永久删除 VPC/集群/节点等所有资源
 ```
 
-----
 #### 关键注意事项
 
 1. ​**安全组规则**​
