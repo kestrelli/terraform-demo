@@ -106,7 +106,7 @@
 	- 原生节点池使用 `CLOUD_BSSD` 云硬盘（高性能 SSD）
 	- 数据盘自动挂载到 `/var/lib/container`
 3. ​**依赖顺序**​
-![Clipboard_Screenshot_1755084347.png](/tencent/api/attachments/s3/url?attachmentid=34173158)
+![Clipboard_Screenshot_1755084347.png](/images/依赖.png)
 
 
 ----
