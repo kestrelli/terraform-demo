@@ -118,7 +118,7 @@
 - ​**节点未就绪**​：
 ```
 	kubectl --kubeconfig kubeconfig.yaml describe nodes
-	```
+```
 
 >建议：首次部署后通过 TKE 控制台 验证资源状态
 
