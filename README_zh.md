@@ -136,7 +136,7 @@ VPC ID: vpc-xxxxxx
 子网ID: subnet-xxxxxx
 kubeconfig文件已生成: kubeconfig.yaml
 ```
-![Clipboard_Screenshot_1757670880.png](/tencent/api/attachments/s3/url?attachmentid=35097882)
+![部署](images/基础设施部署截图.png)
 
 #### 步骤2：CPU Burst 开启测试
 
@@ -159,7 +159,7 @@ kubeconfig文件已生成: kubeconfig.yaml
 [✓] 测试完成 (启动时间: 1598ms)
 ```
 
-![Clipboard_Screenshot_1757666910.png](/tencent/api/attachments/s3/url?attachmentid=35094043)
+![部署](images/开启cpu burst验证结果.png)
 
 #### 步骤3：CPU Burst 关闭测试
 
@@ -180,7 +180,7 @@ kubeconfig文件已生成: kubeconfig.yaml
 [✓] 测试完成 (启动时间: 1904ms)
 ```
 
-![Clipboard_Screenshot_1757666943.png](/tencent/api/attachments/s3/url?attachmentid=35094071)
+![部署](images/关闭cpu burst验证结果.png.png)
 
 
 #### 步骤4：环境清理
@@ -199,7 +199,7 @@ kubeconfig文件已生成: kubeconfig.yaml
 Destroy complete! Resources: 12 destroyed.
 ===== 资源已成功清理 =====
 ```
-![Clipboard_Screenshot_1757671650.png](/tencent/api/attachments/s3/url?attachmentid=35098245)
+![部署](images/基础设施清理截图.png)
 ### ⚙️ 演练环境配置举例说明
 
 #### 配置1：PodQOS CPU Burst 配置​**:
