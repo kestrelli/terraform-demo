@@ -1,62 +1,65 @@
-### 背景与必要性
+[English](README.md) | [中文](README_zh.md)
 
-传统 Kubernetes 资源管理采用严格的 `requests` 和 `limits` 机制，限制了应用的突发性能需求。Java 等应用在启动阶段需要较高的 CPU 资源，但稳定运行后资源需求降低，固定配额导致：
-- ​**启动性能瓶颈**​：应用启动缓慢，影响用户体验
-- ​**资源利用率低**​：为满足峰值需求而过度配置资源，造成浪费
-- ​**弹性能力缺失**​：无法应对突发流量和计算需求
+### Background & Necessity
 
-CPU Burst 技术通过智能配额管理，允许应用临时超过预设限制，既保障了常规运行的稳定性，又满足了突发性能需求。
-### 实践意义
+Traditional Kubernetes resource management employs a rigid `requests` and `limits` mechanism, which constrains applications' burst performance needs. Applications like Java require higher CPU resources during startup phases, but their resource demands decrease significantly after stabilization. Fixed quotas lead to:
+- ​**Startup Performance Bottlenecks**: Slow application startup, negatively impacting user experience.
+- ​**Low Resource Utilization**: Over-provisioning resources to meet peak demands, resulting in waste.
+- ​**Lack of Elasticity**: Inability to handle unexpected traffic spikes and computational demands.
 
-本演示项目深入探索 TKE 原生节点的 CPU Burst 能力，展示如何为 Java 类应用提供：
-- ​**弹性资源分配**​：应用启动时自动获取额外 CPU 资源，加速启动过程
-- ​**成本效益优化**​：避免为短暂的高负载时刻永久预留资源
-- ​**无缝体验升级**​：无需修改应用代码即可获得性能提升
+CPU Burst technology addresses this through intelligent quota management, allowing applications to temporarily exceed preset limits. This ensures stability during normal operation while satisfying burst performance requirements.
 
-### 项目核心价值
+### Practical Significance
 
-- ​**性能提升**​：Java 应用启动时间显著缩短（实测提升 16.07%）
-- ​**资源优化**​：按需使用突发资源，提高整体资源利用率
-- ​**无侵入集成**​：通过 PodQOS CRD 配置，无需修改应用部署配置
-- ​**完整验证体系**​：提供对比测试脚本数据验证，量化展示 Burst 效果
+This demonstration project deeply explores the CPU Burst capability of TKE native nodes, showcasing how to provide Java-based applications with:
+- ​**Elastic Resource Allocation**: Automatically acquire additional CPU resources during startup to accelerate the process.
+- ​**Cost Efficiency Optimization**: Avoid permanently reserving resources for short-lived high-load moments.
+- ​**Seamless Experience Upgrade**: Achieve performance improvements without modifying application code.
 
-### 📊 部署架构全景
+### Project Core Value
+
+- ​**Performance Boost**: Significant reduction in Java application startup time (measured improvement of 16.07%).
+- ​**Resource Optimization**: On-demand use of burst resources, improving overall cluster utilization.
+- ​**Non-Invasive Integration**: Configured via PodQOS CRD, requiring no changes to application deployment configurations.
+- ​**Complete Validation System**: Includes comparative test scripts and data verification to quantitatively demonstrate the Burst effect.
+
+### 📊  Deployment Architecture Overview
 
 ```mermaid
 graph TD
-    %% 主框架
-    A[TKE CPU Burst 演示] --> B[基础设施部署]
-    A --> C[功能验证测试]
-    A --> D[性能对比分析]
+    %% Main Framework
+    A[TKE CPU Burst Demo] --> B[Infrastructure Deployment]
+    A --> C[Functional Validation Testing]
+    A --> D[Performance Comparison Analysis]
     
-    %% 基础设施部署
-    subgraph B[基础设施部署]
-        B1[创建VPC/子网]
-        B2[配置安全组]
-        B3[创建TKE集群]
-        B4[部署原生节点池]
-        B5[安装QOS Agent]
+    %% Infrastructure Deployment
+    subgraph B[Infrastructure Deployment]
+        B1[Create VPC/Subnets]
+        B2[Configure Security Group]
+        B3[Create TKE Cluster]
+        B4[Deploy Native Node Pool]
+        B5[Install QOS Agent]
     end
     
-    %% 功能验证
-    subgraph C[功能验证测试]
-        C1[部署PodQOS配置]
-        C2[部署测试应用]
-        C3[监控资源使用]
+    %% Functional Validation
+    subgraph C[Functional Validation Testing]
+        C1[Deploy PodQOS Config]
+        C2[Deploy Test Application]
+        C3[Monitor Resource Usage]
     end
     
-    %% 性能对比
-    subgraph D[性能对比分析]
-        D1[Burst功能开启测试]
-        D2[Burst功能关闭测试]
-        D3[结果数据收集]
+    %% Performance Comparison
+    subgraph D[Performance Comparison Analysis]
+        D1[Burst Enabled Test]
+        D2[Burst Disabled Test]
+        D3[Result Data Collection]
     end
     
-    %% 依赖关系
+    %% Dependencies
     B --> C
     C --> D
     
-    %% 样式定义
+    %% Style Definitions
     classDef infra fill:#e6f7ff,stroke:#1890ff;
     classDef test fill:#f6ffed,stroke:#52c41a;
     classDef analysis fill:#fff7e6,stroke:#ffc53d;
@@ -70,139 +73,136 @@ graph TD
 
 ```mermaid
 sequenceDiagram
-    participant U as 测试脚本
+    participant U as Test Script
     participant K as Kubernetes API
     participant Q as QOS Agent
-    participant P as 应用Pod
+    participant P as Application Pod
    
-   Note over U, K: Burst功能开启
-    U->>K: 应用PodQOS配置
-    K->>Q: 同步Burst策略
-    U->>K: 部署测试应用
-    K->>P: 创建Pod(含资源限制)
+   Note over U, K: Burst Feature Enabled
+    U->>K: Apply PodQOS Configuration
+    K->>Q: Sync Burst Policy
+    U->>K: Deploy Test Application
+    K->>P: Create Pod (with resource limits)
     
     
-    P->>Q: 请求额外CPU资源
-    Q->>P: 授予突发配额
-    P->>U: 快速启动(记录时间)
+    P->>Q: Request Additional CPU Resources
+    Q->>P: Grant Burst Quota
+    P->>U: Fast Startup (Record time)
     
-    Note over U,K: 重复测试流程<br>关闭Burst功能
-    U->>K: 删除PodQOS配置
-    U->>K: 重新部署应用
-    K->>P: 创建Pod(严格限制)
-    P->>U: 正常启动(记录时间)
+    Note over U,K: Repeat Test Flow<br>Burst Feature Disabled
+    U->>K: Remove PodQOS Configuration
+    U->>K: Redeploy Application
+    K->>P: Create Pod (Strict limits)
+    P->>U: Normal Startup (Record time)
     
-    U->>U: 生成对比报告
+    U->>U: Generate Comparison Report
 ```
-### 🛠 前提条件
+### 🛠  Prerequisites
 
-- ​**腾讯云账号**​：子账号需具备以下权限
-	- `QcloudTKEAccess` TKE 访问权限
-	- `QcloudVPCFullAccess` VPC 全访问权限
-- ​**访问密钥**​：准备腾讯云 SecretId 和 SecretKey
-- ​**地域选择**​：支持原生节点和 CPU Burst 功能的区域
-	- 推荐使用 `ap-nanjing`（南京）区域
-- ​**资源配额**​：确保有足够的资源配额创建
-	- VPC 和子网资源
-	- 至少 2 个 CVM 实例额度
-	- TKE 集群资源
+- ​**Tencent Cloud Account**: Sub-account requires the following permissions:
+     - `QcloudTKEAccess` (TKE Access Permission)
+	- `QcloudVPCFullAccess` (VPC Full Access Permission)
+- ​**Access Keys**: Prepare Tencent Cloud SecretId and SecretKey.
+- ​**Region Selection**: Use a region that supports Native Nodes and the CPU Burst feature.- Recommended region: `ap-nanjing` (Nanjing).
+- ​**Resource Quotas**: Ensure sufficient quotas are available to create:- VPC and subnet resources.
+	- At least 2 CVM instance quotas.
+	- TKE cluster resources.
+### 🚀  Quick Start
 
-### 🚀 快速开始
-
-#### 步骤1：容器基础设施搭建
+#### Step 1: Container Infrastructure Setup
 
 ```
-# 执行基础设施部署脚本
+# Execute infrastructure deployment script
 ./infra/deploy_infra.sh
 ```
 
-- 预期输出结果​：
+- **Expected Output**:
 
 ```
 Outputs:
 
-===== TKE 基础设施部署开始 =====
-请输入腾讯云SecretId: ********************
-请输入腾讯云SecretKey: ********************
+===== TKE Infrastructure Deployment Started =====
+Please enter Tencent Cloud SecretId: ********************
+Please enter Tencent Cloud SecretKey: ********************
 
 Terraform initialized successfully!
 ...
 Apply complete! Resources: 12 added, 0 changed, 0 destroyed.
 
-===== TKE基础设施部署完成 =====
-集群ID: cls-xxxxxx
-集群名称: tke-cpu-burst-abc123
+===== TKE Infrastructure Deployment Complete =====
+Cluster ID: cls-xxxxxx
+Cluster Name: tke-cpu-burst-abc123
 VPC ID: vpc-xxxxxx
-子网ID: subnet-xxxxxx
-kubeconfig文件已生成: kubeconfig.yaml
+Subnet ID: subnet-xxxxxx
+kubeconfig file generated: kubeconfig.yaml
 ```
 
 
-#### 步骤2：CPU Burst 开启测试
+####  Step 2: CPU Burst Enabled Test
 
 ```
-# 执行Burst开启测试脚本
+# Execute Burst enabled test script
 ./burst-on_test.sh
 ```
 
-- 预期输出结果​：
+-  ​**Expected Output**:
 
 ```
-===== CPU Burst开启测试 =====
-[i] 应用PodQOS配置: podqos-burst.yaml
-[✓] PodQOS配置部署成功
-[i] 部署测试应用: burst-on_test.yaml
-[✓] 应用部署成功
-[i] 等待Pod就绪...
-[✓] Pod已就绪: tomcat-abc123
-[i] 监控启动日志...
-[✓] 测试完成 (启动时间: 1598ms)
+===== CPU Burst Enabled Test =====
+[i] Applying PodQOS configuration: podqos-burst.yaml
+[✓] PodQOS configuration deployed successfully
+[i] Deploying test application: burst-on_test.yaml
+[✓] Application deployed successfully
+[i] Waiting for Pod to become ready...
+[✓] Pod is ready: tomcat-abc123
+[i] Monitoring startup logs...
+[✓] Test completed (Startup time: 1598ms)
 ```
 
-![Clipboard_Screenshot_1757666910.png](/tencent/api/attachments/s3/url?attachmentid=35094043)
+![Clipboard_Screenshot_1757666910.png](/tencent/api/attachments/s3/url?attachmentid=35097704)
 
-#### 步骤3：CPU Burst 关闭测试
+#### Step 3: CPU Burst Disabled Test
 
 ```
-# 执行Burst关闭测试脚本
+# Execute Burst disabled test script
 ./burst-off_test.sh
 ```
 
-- 预期输出结果​：
+- **Expected Output**:
 
 ```
-===== CPU Burst关闭测试 =====
-[i] 部署测试应用: burst-off_test.yaml
-[✓] 应用部署成功
-[i] 等待Pod就绪...
-[✓] Pod已就绪: tomcat-def456
-[i] 监控启动日志...
-[✓] 测试完成 (启动时间: 1904ms)
+===== CPU Burst Disabled Test =====
+[i] Deploying test application: burst-off_test.yaml
+[✓] Application deployed successfully
+[i] Waiting for Pod to become ready...
+[✓] Pod is ready: tomcat-def456
+[i] Monitoring startup logs...
+[✓] Test completed (Startup time: 1904ms)
 ```
 
-![Clipboard_Screenshot_1757666943.png](/tencent/api/attachments/s3/url?attachmentid=35094071)
+![Clipboard_Screenshot_1757666943.png](/tencent/api/attachments/s3/url?attachmentid=35097705)
 
 
-#### 步骤4：环境清理
+#### Step 4: Environment Cleanup
 
 ```
-# 执行资源清理脚本
+# Execute resource cleanup script
 ./destroy-infra.sh
 ```
 
-- 预期输出结果​：
+- **Expected Output**:
 
 ```
-===== 销毁TKE基础设施 =====
-警告: 这将删除所有相关资源!
+===== Destroying TKE Infrastructure =====
+Warning: This will delete all related resources!
 ...
 Destroy complete! Resources: 12 destroyed.
-===== 资源已成功清理 =====
+===== Resources Successfully Cleaned Up =====
 ```
 
-### ⚙️ 演练环境配置举例说明
+### ⚙️  Example Exercise Environment Configurations
 
-#### 配置1：PodQOS CPU Burst 配置​**:
+#### Configuration 1: PodQOS CPU Burst Configuration
 ```
 # podqos-burst.yaml
 apiVersion: ensurance.crane.io/v1alpha1
@@ -219,7 +219,7 @@ spec:
         burstQuota: "4.0"
 ```
 
-#### 配置2：开启Burst测试应用
+#### ### Configuration 2: Test Application (Burst Enabled)
 
 ```
 # burst-on_test.yaml
@@ -236,14 +236,14 @@ spec:
         image: tomcat:latest
         resources:
           limits:
-            cpu: "0.1"  # 严格限制：0.1核
+            cpu: "0.1"  # Strict limit: 0.1 core
             memory: "1Gi"
           requests:
             cpu: "0.1"
             memory: "1Gi"
   ```
   
-#### 配置3：关闭Burst测试应用
+#### Configuration 3: Test Application (Burst Disabled)
 
 ```
 # burst-off_test.yaml
@@ -267,19 +267,19 @@ spec:
             memory: "1Gi"
 ```
 
-### 📂 项目结构
+### 📂  Project Structure
 ```
 tke-cpu-burst-demo/
-├── deploy-infra.sh           # 基础设施部署脚本
-├── destroy-infra.sh          # 资源清理脚本
-├── burst-on_test.sh          # Burst开启测试脚本
-├── burst-off_test.sh         # Burst关闭测试脚本
-├── variables.tf              # Terraform变量定义
-├── outputs.tf                # Terraform输出定义
-├── main.tf                   # 主要Terraform配置
-├── podqos-burst.yaml         # PodQOS Burst配置
-├── burst-on_test.yaml        # 测试应用部署（Burst开启）
-├── burst-off_test.yaml       # 测试应用部署（Burst关闭）
-└── README_zh.md              # 中文说明文档
-└── README.md                 # 英文说明文档
+├── deploy-infra.sh           # Infrastructure deployment script
+├── destroy-infra.sh          # Resource cleanup script
+├── burst-on_test.sh          # Burst enabled test script
+├── burst-off_test.sh         # Burst disabled test script
+├── variables.tf              # Terraform variable definitions
+├── outputs.tf                # Terraform output definitions
+├── main.tf                   # Main Terraform configuration
+├── podqos-burst.yaml         # PodQOS Burst configuration
+├── burst-on_test.yaml        # Test application deployment (Burst enabled)
+├── burst-off_test.yaml       # Test application deployment (Burst disabled)
+└── README_zh.md              # Chinese documentation
+└── README.md                 # English documentation (This file)
 ```
