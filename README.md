@@ -136,7 +136,7 @@ VPC ID: vpc-xxxxxx
 Subnet ID: subnet-xxxxxx
 kubeconfig file generated: kubeconfig.yaml
 ```
-
+![部署](images/基础设施部署截图.png)
 
 ####  Step 2: CPU Burst Enabled Test
 
@@ -159,7 +159,7 @@ kubeconfig file generated: kubeconfig.yaml
 [✓] Test completed (Startup time: 1598ms)
 ```
 
-![Clipboard_Screenshot_1757666910.png](/tencent/api/attachments/s3/url?attachmentid=35097704)
+![部署](images/开启cpuburst.png)
 
 #### Step 3: CPU Burst Disabled Test
 
@@ -180,7 +180,7 @@ kubeconfig file generated: kubeconfig.yaml
 [✓] Test completed (Startup time: 1904ms)
 ```
 
-![Clipboard_Screenshot_1757666943.png](/tencent/api/attachments/s3/url?attachmentid=35097705)
+![部署](images/关闭cpuburst.png)
 
 
 #### Step 4: Environment Cleanup
@@ -199,6 +199,7 @@ Warning: This will delete all related resources!
 Destroy complete! Resources: 12 destroyed.
 ===== Resources Successfully Cleaned Up =====
 ```
+![部署](images/基础设施清理截图.png)
 
 ### ⚙️  Example Exercise Environment Configurations
 
