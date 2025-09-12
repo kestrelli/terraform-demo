@@ -159,7 +159,7 @@ kubeconfig文件已生成: kubeconfig.yaml
 [✓] 测试完成 (启动时间: 1598ms)
 ```
 
-![部署](images/开启cpu burst验证结果.png)
+![部署](images/开启cpuburst.png)
 
 #### 步骤3：CPU Burst 关闭测试
 
@@ -180,7 +180,7 @@ kubeconfig文件已生成: kubeconfig.yaml
 [✓] 测试完成 (启动时间: 1904ms)
 ```
 
-![部署](images/关闭cpu burst验证结果.png.png)
+![部署](images/关闭cpuburst.png)
 
 
 #### 步骤4：环境清理
