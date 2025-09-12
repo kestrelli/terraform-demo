@@ -180,7 +180,7 @@ kubeconfig文件已生成: kubeconfig.yaml
 [✓] 测试完成 (启动时间: 1904ms)
 ```
 
-![部署](images/关闭cpu burst.png)
+![部署](images/关闭cpuburst.png)
 
 
 #### 步骤4：环境清理
