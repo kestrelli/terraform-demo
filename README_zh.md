@@ -1,3 +1,5 @@
+[English](README.md) | [中文](README_zh.md)
+
 ### 背景与必要性
 
 传统 Kubernetes 资源管理采用严格的 `requests` 和 `limits` 机制，限制了应用的突发性能需求。Java 等应用在启动阶段需要较高的 CPU 资源，但稳定运行后资源需求降低，固定配额导致：
