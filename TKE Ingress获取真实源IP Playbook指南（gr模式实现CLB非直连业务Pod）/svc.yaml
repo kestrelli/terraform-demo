@@ -1,0 +1,13 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: real-ip-service
+  namespace: kestrel-catchip  # 匹配Deployment命名空间
+spec:
+  selector:
+    app: real-ip-app  # 匹配Deployment标签
+  ports:
+    - protocol: TCP
+      port: 80         # Service外部访问端口
+      targetPort: 5000 # 映射到Deployment的5000端口
+  type: NodePort       # 关键：NodePort模式启用源IP透传
