@@ -1,0 +1,21 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: real-ip-demo
+  labels:
+    app: real-ip-app  # 需与Service选择器匹配
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: real-ip-app
+  template:
+    metadata:
+      labels:
+        app: real-ip-app
+    spec:
+      containers:
+      - name: real-ip-container
+        image: vickytan-demo.tencentcloudcr.com/kestrelli/images:v1.0  # 指定您的业务镜像
+        ports:
+        - containerPort: 5000  # 必须与业务实际端口一致
