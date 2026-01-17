@@ -1,0 +1,20 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: real-ip-demo
+  namespace: default
+spec:
+  replicas: 3  # 按需调整 Pod 数量
+  selector:
+    matchLabels:
+      app: real-ip-app
+  template:
+    metadata:
+      labels:
+        app: real-ip-app
+    spec:
+      containers:
+      - name: real-ip-container
+        image: vickytan-demo.tencentcloudcr.com/kestrelli/images:v1.0
+        ports:
+        - containerPort: 5000
